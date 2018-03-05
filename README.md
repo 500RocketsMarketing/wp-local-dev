@@ -23,6 +23,16 @@ cp wp-test-site/initdata.sql wp-local-dev/docker/
 Anytime the site repo changes you will need to 'git pull' and re-run
 the above commands to copy in the new changes from git.
 
+Open the file named rewrite_urls.sql and change all occurances of the word CHANGEME to the hostname
+of the staging site you launching locally. For instance, if you were trying to boot 500 rockets main
+site locally, use staging.500rockets.io as the value.
+
+Once you have updated sql file execute run_url_rewrite.sh to run the sql.
+
+```bash
+./run_url_rewerite.sql
+```
+
 ### Boot Site
 
 To create the site fresh:
@@ -35,6 +45,7 @@ To reload the database without effecting file content:
 
 ```bash
 ./reload_db.sh
+./run_url_rewrite.sh
 ```
 
 To reload the file content without reloading the database:
