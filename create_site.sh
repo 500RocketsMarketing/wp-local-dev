@@ -29,7 +29,7 @@ printf "Setting File Permissions...\n"
 docker exec docker_test-site_1 /bin/sh -c 'chown -R www-data:www-data /var/www/html'
 
 printf "loading data in to container...\n"
-docker cp initdata.sql docker_mariadb_1:/
+docker cp docker/initdata.sql docker_mariadb_1:/
 
 printf "importing into database...\n"
 docker exec docker_mariadb_1 /bin/sh -c 'mysql -u root -proot demo_db </initdata.sql'
