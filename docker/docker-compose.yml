@@ -1,0 +1,53 @@
+version: '3.1'
+
+services:
+  test-site:
+    build: .
+    image: test-site 
+    ports:
+      - '80:80'
+    depends_on:
+      - mariadb
+    environment:
+      WORDPRESS_DB_PASSWORD: password 
+      WORDPRESS_DB_USER: demo_user
+      WORDPRESS_DB_NAME: demo_db
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DEBUG: 'true'
+    restart: always
+    networks:
+      - wordpress-network
+    links:
+      - mariadb:test-site
+    volumes:
+      - demo_site:/var/www/html
+  mariadb:
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=demo_db
+      - MYSQL_USER=demo_user
+      - MYSQL_PASSWORD=password
+    ports:
+      - '3306:3306'
+    restart: always
+    volumes:
+      - demodb:/var/lib/mysql
+    networks:
+      - wordpress-network
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '8080:80'
+    depends_on:
+      - mariadb
+    links:
+      - "mariadb:db"
+    networks:
+      - wordpress-network
+volumes:
+  demodb:
+  demo_site:
+networks:
+  wordpress-network:
+    driver: bridge
